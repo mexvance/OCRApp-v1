@@ -1,0 +1,13 @@
+[
+    {
+      "label": "8 Digits Only",
+      "regex": "^[0-9]{8}$",
+      "flags": "i"
+    },
+    {
+      "label": "0+A+123456 Serial Format",
+      "regex": "\\b\\d[A-Za-z]\\d{6}\\b",
+      "flags": "i"
+    }
+  ]
+  

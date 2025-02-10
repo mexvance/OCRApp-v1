@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Camera from './Camera';
 import OCRComponent from './OCRComponent';
 
-const CameraWrapper = ({ webcamRef }) => {
+const CameraWrapper = ({ webcamRef, onOcrResult }) => {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [cameraReady, setCameraReady] = useState(false);
 
@@ -33,7 +33,8 @@ const CameraWrapper = ({ webcamRef }) => {
         <>
           <Camera webcamRef={webcamRef} onCameraReady={handleCameraReady} />
           {cameraReady && (
-            <OCRComponent webcamRef={webcamRef} />
+            // Pass the OCR callback to OCRComponent so it can send back the result
+            <OCRComponent webcamRef={webcamRef} onOcrResult={onOcrResult} />
           )}
         </>
       )}

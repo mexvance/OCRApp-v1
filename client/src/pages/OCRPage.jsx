@@ -1,4 +1,4 @@
-import React, { useRef} from 'react';
+import { useRef} from 'react';
 import CameraWrapper from '../components/CameraWrapper';
 const OcrApp = () => {
   const webcamRef = useRef(null);
@@ -6,7 +6,7 @@ const OcrApp = () => {
   return (
     <div style={{ textAlign: 'center', marginTop: '2rem' }}>
       <h1>Live OCR App</h1>
-      <CameraWrapper webcamRef={webcamRef}/>
+      <CameraWrapper webcamRef={webcamRef} />
       <br />
       
     </div>

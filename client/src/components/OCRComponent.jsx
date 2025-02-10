@@ -1,20 +1,20 @@
-import React, {useState } from 'react';
+import { useState } from 'react';
 import callGoogleAPI from '../Services/callGoogleAPI';
-const OCRComponent = ({...props}) => {
-  const [ocrResult, setOcrResult] = useState('');
+
+const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
   const [loading, setLoading] = useState(false);
 
   const captureAndOcr = async () => {
     // Capture a screenshot from the webcam
-    const imageSrc = props.webcamRef.current.getScreenshot();
+    const imageSrc = webcamRef.current.getScreenshot();
     if (!imageSrc) return;
 
     setLoading(true);
 
     try {
       // Run OCR on the captured image using Google Vision API
-      const text  = await callGoogleAPI(imageSrc);
-      setOcrResult(text);
+      const text = await callGoogleAPI(imageSrc);
+      onOcrResult(text);
     } catch (error) {
       console.error('OCR error:', error);
     } finally {
@@ -25,7 +25,6 @@ const OCRComponent = ({...props}) => {
   return (
     <>
       <button onClick={captureAndOcr} disabled={loading} style={{ marginTop: '1rem' }}>
-        {/* You could add a loading spinner here too instead of just changing the button text */}
         {loading ? 'Processing...' : 'Capture and OCR'}
       </button>
       {ocrResult && (

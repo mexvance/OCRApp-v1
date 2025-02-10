@@ -19,7 +19,7 @@ This project is a demo application that captures live webcam images and performs
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/live-ocr-app.git
+   git clone https://github.com/mexvance/OCRApp-v1.git
    cd live-ocr-app
    ```
 
