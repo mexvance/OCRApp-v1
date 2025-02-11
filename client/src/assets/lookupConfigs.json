@@ -1,0 +1,19 @@
+[
+    {
+    
+      "type": "MSSQL",
+      "query": "SELECT value FROM myTable WHERE id = ?"
+      
+    },
+    {
+      "type": "excel",
+      "file": "data.xlsx",
+      "sheet": "Sheet1",
+      "cell": "B2"
+    },
+    {
+      "type": "api",
+      "url": "https://example.com/lookup"
+    }
+  ]
+  
