@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Webcam from "react-webcam";
+import PropTypes from "prop-types";
 
 const Camera = ({ webcamRef, onCameraReady }) => {
   const [devices, setDevices] = useState([]);
@@ -84,5 +85,9 @@ const Camera = ({ webcamRef, onCameraReady }) => {
     </div>
   );
 };
+Camera.propTypes = {
+  webcamRef: PropTypes.object.isRequired,
+  onCameraReady: PropTypes.object.isRequired,
+}
 
 export default Camera;

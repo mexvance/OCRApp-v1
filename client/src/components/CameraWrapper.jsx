@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Camera from './Camera';
 import OCRComponent from './OCRComponent';
+import PropTypes from 'prop-types';
 
 const CameraWrapper = ({ webcamRef, onOcrResult }) => {
   const [isCameraOn, setIsCameraOn] = useState(false);
@@ -41,5 +42,10 @@ const CameraWrapper = ({ webcamRef, onOcrResult }) => {
     </div>
   );
 };
+
+CameraWrapper.propTypes = {
+  webcamRef: PropTypes.object.isRequired,
+  onOcrResult: PropTypes.object.isRequired,
+}
 
 export default CameraWrapper;

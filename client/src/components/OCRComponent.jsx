@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import callGoogleAPI from '../Services/callGoogleAPI';
-
+import PropTypes from 'prop-types';
 const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
   const [loading, setLoading] = useState(false);
 
@@ -36,5 +36,10 @@ const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
     </>
   );
 };
+OCRComponent.propTypes = {
+  webcamRef: PropTypes.object.isRequired,
+  onOcrResult: PropTypes.object.isRequired,
+  ocrResult: PropTypes.object.isRequired,
+}
 
 export default OCRComponent;

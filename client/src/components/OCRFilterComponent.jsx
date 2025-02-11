@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import rules from '../assets/rules.json';
-
+import { useState, useEffect } from 'react';
+import rules from '../assets/huxrules.json';
+import PropTypes
+ from 'prop-types';
 const OCRFilterComponent = ({ ocrResult, filteredText }) => {
   // Initialize state with the first rule from the JSON.
   const [selectedRule, setSelectedRule] = useState(rules[0].regex);
@@ -43,5 +44,8 @@ const OCRFilterComponent = ({ ocrResult, filteredText }) => {
       </div>
   );
 };
-
+OCRFilterComponent.propTypes = {
+  ocrResult: PropTypes.object.isRequired,
+  filteredText: PropTypes.object.isRequired,
+}
 export default OCRFilterComponent;
