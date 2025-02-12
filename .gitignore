@@ -34,5 +34,6 @@ tmp
 *.tmp
 *.swp
 *.swo
-*.pid
+*.
+*credentials
 huxrules.json
