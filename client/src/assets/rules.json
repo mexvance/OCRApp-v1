@@ -1,4 +1,9 @@
 [
+  {
+    "label": "No Filter",
+    "regex": "^[\\s\\S]*$",
+    "flags": "i"
+  },
     {
       "label": "8 Digits Only",
       "regex": "^[0-9]{8}$",

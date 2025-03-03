@@ -1,0 +1,28 @@
+services:
+  ncr_client:
+    container_name: OCR_client
+    restart: always
+    image: ocr_client
+    build: 
+      context: ../client
+      dockerfile: dockerfile.client
+    networks:
+      - nginx
+    ports:
+      - "8080:80"
+
+  ncr_api:
+    container_name: OCR_api
+    restart: always
+    image: ocr_api
+    build: 
+      context: ../api
+      dockerfile: dockerfile.api
+    networks:
+      - nginx
+    ports:
+      - "5000:5000"
+
+networks:
+  nginx:
+    driver: bridge

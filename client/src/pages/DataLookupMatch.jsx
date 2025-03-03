@@ -27,7 +27,7 @@ const InputMatch = () => {
       {/* Pass a callback so that CameraWrapper can send the OCR result back */}
       <CameraWrapper webcamRef={webcamRef} onOcrResult={setOcrResult} />
       <br />
-      <label style={{ marginTop: '1rem', display: 'block' }}>
+      {/* <label style={{ marginTop: '1rem', display: 'block' }}>
         Input Text here:
         <input
           type="text"
@@ -37,7 +37,7 @@ const InputMatch = () => {
           style={{ marginLeft: '0.5rem' }}
         />
         Handle data lookup tied to this input for your search item in this box
-      </label>
+      </label> */}
       {/* Render the OCR filter component */}
       <OCRFilterComponent ocrResult={ocrResult} filteredText={setFilteredText}/>
       <br />
@@ -47,11 +47,11 @@ const InputMatch = () => {
       </div>
 
       <div style={{ marginTop: '1rem' }}>
-        {ocrResult && (<>
-              <strong>Filtered Output:</strong>{' '}
-            
-              {filteredText ? filteredText : 'No matching text found'}
-            </>
+        {ocrResult && (
+          <>
+            <strong>Filtered Output:</strong>{' '}
+            {filteredText ? filteredText : 'No matching text found'}
+          </>
         )}
         </div>
       <div>
