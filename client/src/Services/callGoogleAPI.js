@@ -1,7 +1,7 @@
 const callGoogleAPI = async (imageSrc) => {
     try {
       // Send the captured image to your backend API endpoint.
-      const response = await fetch('http://localhost:5000/api/vision-ocr', {
+      const response = await fetch('http://ocr_api:5000/api/vision-ocr', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
