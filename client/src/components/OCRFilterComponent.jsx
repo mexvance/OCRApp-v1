@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import rules from '../assets/huxrules.json';
+import rules from '../assets/rules.json';
 import PropTypes
  from 'prop-types';
 const OCRFilterComponent = ({ ocrResult, filteredText }) => {
