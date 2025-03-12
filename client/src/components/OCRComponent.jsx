@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import callGoogleAPI from '../Services/callGoogleAPI';
 import PropTypes from 'prop-types';
-const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
+const OCRComponent = ({ webcamRef, onOcrResult, cameraReady }) => {
   const [loading, setLoading] = useState(false);
 
   const captureAndOcr = async () => {
@@ -13,6 +13,7 @@ const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
 
     try {
       // Run OCR on the captured image using Google Vision API
+      console.log(imageSrc)
       const text = await callGoogleAPI(imageSrc);
       onOcrResult(text);
     } catch (error) {
@@ -24,22 +25,17 @@ const OCRComponent = ({ webcamRef, onOcrResult, ocrResult }) => {
 
   return (
     <>
-      <button onClick={captureAndOcr} disabled={loading} style={{ marginTop: '1rem' }}>
+      <button onClick={captureAndOcr} disabled={loading || !cameraReady} >
         {loading ? 'Processing...' : 'Capture and OCR'}
       </button>
-      {ocrResult && (
-        <div style={{ marginTop: '1rem', textAlign: 'left', maxWidth: '400px', margin: 'auto' }}>
-          <h2>OCR Result:</h2>
-          <p>{ocrResult}</p>
-        </div>
-      )}
     </>
   );
 };
 OCRComponent.propTypes = {
   webcamRef: PropTypes.object.isRequired,
-  onOcrResult: PropTypes.object.isRequired,
-  ocrResult: PropTypes.object.isRequired,
+  onOcrResult: PropTypes.func.isRequired,
+  ocrResult: PropTypes.string.isRequired,
+  cameraReady: PropTypes.string.isRequired,
 }
 
 export default OCRComponent;

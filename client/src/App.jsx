@@ -6,15 +6,15 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 function App() {
   return (
     <Router>
-      <nav>
-        <Link to="/">Home</Link> {" | "} 
+      {/* <nav>
+        <Link to="/">Text Verification</Link> {" | "} 
         <Link to="/InputMatch">Input Matcher</Link> {" | "} 
         <Link to="/DataLookupMatch">DataLookupMatch</Link>
-      </nav>
+      </nav> */}
       <Routes>
-        <Route path="/" element={<OcrApp/>} />
-        <Route path="/InputMatch" element={<InputMatch/>} />
-        <Route path="/DataLookupMatch" element={<DataLookupMatch/>}/>
+        {/* <Route path="/" element={<OcrApp/>} /> */}
+        <Route path="/" element={<InputMatch/>} />
+        {/* <Route path="/DataLookupMatch" element={<DataLookupMatch/>}/> */}
       </Routes>
     </Router>
     

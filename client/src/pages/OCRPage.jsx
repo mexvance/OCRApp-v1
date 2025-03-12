@@ -4,7 +4,7 @@ const OcrApp = () => {
   const webcamRef = useRef(null);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+    <div >
       <h1>Live OCR App</h1>
       <CameraWrapper webcamRef={webcamRef} />
       <br />

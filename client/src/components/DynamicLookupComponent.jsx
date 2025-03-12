@@ -41,7 +41,7 @@ const DynamicValidationComponent = ({ ocrResult }) => {
   }, [ocrResult, lookupValue]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "2rem" }}>
+    <div >
       <h1>Dynamic Validation</h1>
       <div>
         <label>
@@ -55,18 +55,18 @@ const DynamicValidationComponent = ({ ocrResult }) => {
           </select>
         </label>
       </div>
-      <div style={{ marginTop: "1rem" }}>
+      <div >
         <label>
           Enter Value:
           <input
             type="text"
             value={userInput}
             onChange={handleInputChange}
-            style={{ marginLeft: "0.5rem" }}
+            
           />
         </label>
       </div>
-      <div style={{ marginTop: "1rem" }}>
+      <div >
         <p>
           <strong>Lookup Value:</strong> {lookupValue}
         </p>

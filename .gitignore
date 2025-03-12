@@ -36,3 +36,4 @@ tmp
 *.swo
 *.pid
 huxrules.json
+nginx.conf
