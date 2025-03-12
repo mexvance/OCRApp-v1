@@ -14,7 +14,7 @@ services:
     networks:
       - nginx
     ports:
-      - "8080:80"
+      - "8080:8080"
       - "80:80"
   ncr_api:
     container_name: OCR_api
