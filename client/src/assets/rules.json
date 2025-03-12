@@ -1,7 +1,7 @@
 [
   {
     "label": "No Filter",
-    "regex": "^[\\s\\S]*$",
+    "regex": ".*",
     "flags": "i"
   },
   {
