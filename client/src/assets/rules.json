@@ -5,8 +5,18 @@
     "flags": "gimsu"
   },
   {
-    "label": "8 Digits Only",
+    "label": "8 Digits Numbers Only",
     "regex": "[0-9]{8}",
+    "flags": "i"
+  },
+  {
+    "label": "8 Digits",
+    "regex": "^[A-Za-z][0-9]{8}$",
+    "flags": "i"
+  },
+  {
+    "label": "Ventum 7 Digits",
+    "regex": "[0-9]{7}",
     "flags": "i"
   },
   {
