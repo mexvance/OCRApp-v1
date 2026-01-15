@@ -5,21 +5,6 @@
     "flags": "gimsu"
   },
   {
-    "label": "8 Digits Numbers Only",
-    "regex": "[0-9]{8}",
-    "flags": "i"
-  },
-  {
-    "label": "8 Digits",
-    "regex": "^[A-Za-z][0-9]{8}$",
-    "flags": "i"
-  },
-  {
-    "label": "Ventum 7 Digits",
-    "regex": "[0-9]{7}",
-    "flags": "i"
-  },
-  {
     "label": "0+A+123456 Serial Format",
     "regex": "\\b\\d[A-Za-z]\\d{6}\\b",
     "flags": "i"
@@ -50,7 +35,7 @@
     "flags": "i"
   },
   {
-    "label": "A+12+A+12345 Serial Format",
+    "label": "A+12+A+123456 Serial Format",
     "regex": "\\b[A-Za-z]\\d{2}[A-Za-z]\\d{6}\\b",
     "flags": "i"
   }
