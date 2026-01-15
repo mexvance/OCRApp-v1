@@ -24,4 +24,30 @@
     "regex": "\\b\\d[A-Za-z]\\d{6}\\b",
     "flags": "i"
   }
+  
+  {
+    "label": "12+A+123456 Serial Format",
+    "regex": "\\b\\d{2}[A-Za-z]\\d{6}\\b",
+    "flags": "i"
+  },
+  {
+    "label": "1776+A+1234 Serial Format",
+    "regex": "\\b\\d{4}[A-Za-z]\\d{4}\\b",
+    "flags": "i"
+  },
+  {
+    "label": "12+AA+123456 Serial Format",
+    "regex": "\\b\\d{2}[A-Za-z]{2}\\d{6}\\b",
+    "flags": "i"
+  },
+  {
+    "label": "A+1+A+123456 Serial Format",
+    "regex": "\\b[A-Za-z]\\d[A-Za-z]\\d{6}\\b",
+    "flags": "i"
+  },
+  {
+    "label": "A+12+A+123456 Serial Format",
+    "regex": "\\b[A-Za-z]\\d{2}[A-Za-z]\\d{6}\\b",
+    "flags": "i"
+  }
 ]
