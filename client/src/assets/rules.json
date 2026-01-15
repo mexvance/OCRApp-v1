@@ -45,7 +45,12 @@
     "flags": "i"
   },
   {
-    "label": "A+12+A+123456 Serial Format",
+    "label": "A+12+A+12345 Serial Format",
+    "regex": "\\b[A-Za-z]\\d{2}[A-Za-z]\\d{5}\\b",
+    "flags": "i"
+  },
+  {
+    "label": "A+12+A+12345 Serial Format",
     "regex": "\\b[A-Za-z]\\d{2}[A-Za-z]\\d{6}\\b",
     "flags": "i"
   }
