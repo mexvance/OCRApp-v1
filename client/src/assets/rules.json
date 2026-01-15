@@ -23,8 +23,7 @@
     "label": "0+A+123456 Serial Format",
     "regex": "\\b\\d[A-Za-z]\\d{6}\\b",
     "flags": "i"
-  }
-  
+  },
   {
     "label": "12+A+123456 Serial Format",
     "regex": "\\b\\d{2}[A-Za-z]\\d{6}\\b",
