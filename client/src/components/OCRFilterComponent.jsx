@@ -1,38 +1,16 @@
-import { useState, useEffect } from 'react';
 import rules from '../assets/rules.json';
 import PropTypes from 'prop-types';
 
-const OCRFilterComponent = ({ ocrResult, filteredText }) => {
-  const [selectedRule, setSelectedRule] = useState(rules[0].regex);
-  const [selectedFlags, setSelectedFlags] = useState(rules[0].flags);
-
-  const handleRuleChange = (e) => {
-    const newRule = rules.find(rule => rule.regex === e.target.value);
-    if (newRule) {
-      setSelectedRule(newRule.regex);
-      setSelectedFlags(newRule.flags || "");
-    }
+const OCRFilterComponent = ({ selectedRegex, onRuleChange }) => {
+  const handleChange = (e) => {
+    const rule = rules.find(r => r.regex === e.target.value);
+    if (rule) onRuleChange(rule);
   };
-
-  useEffect(() => {
-    if (ocrResult && selectedRule) {
-      const regex = new RegExp(selectedRule, selectedFlags);
-      const match = ocrResult.match(regex);
-      console.log(match);
-      filteredText(match ? match[0] : "");
-    } else {
-      filteredText("");
-    }
-  }, [ocrResult, selectedRule, filteredText, selectedFlags]);
 
   return (
     <div className="input-field">
-      <label htmlFor="filterSelect">Select Text Matching Type:</label>
-      <select
-        id="filterSelect"
-        value={selectedRule}
-        onChange={handleRuleChange}
-      >
+      <label htmlFor="filterSelect">Text Matching Type:</label>
+      <select id="filterSelect" value={selectedRegex} onChange={handleChange}>
         {rules.map((rule) => (
           <option key={rule.label} value={rule.regex}>
             {rule.label}
@@ -44,8 +22,8 @@ const OCRFilterComponent = ({ ocrResult, filteredText }) => {
 };
 
 OCRFilterComponent.propTypes = {
-  ocrResult: PropTypes.string.isRequired,      // It's a string result from OCR
-  filteredText: PropTypes.func.isRequired,     // Function to set filtered text
+  selectedRegex: PropTypes.string.isRequired,
+  onRuleChange: PropTypes.func.isRequired,
 };
 
 export default OCRFilterComponent;

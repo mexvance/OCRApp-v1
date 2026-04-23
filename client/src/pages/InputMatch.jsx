@@ -3,6 +3,11 @@ import CameraWrapper from "../components/CameraWrapper";
 import OCRFilterComponent from "../components/OCRFilterComponent";
 import compareValues from "../Services/compareService";
 import OCRComponent from "../components/OCRComponent";
+import { saveEntry, updateEntry } from "../Services/logService";
+import rules from "../assets/rules.json";
+
+// Rules that can be auto-detected (skip "No Filter" which matches everything)
+const detectableRules = rules.filter((r) => r.regex !== ".*");
 
 const InputMatch = () => {
   const webcamRef = useRef(null);
@@ -12,113 +17,183 @@ const InputMatch = () => {
   const [similarity, setSimilarity] = useState(0);
   const [cameraReady, setCameraReady] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [activeRule, setActiveRule] = useState(rules[0]);
+  const [settingsOpen, setSettingsOpen] = useState(window.innerWidth >= 768);
+  const hasLoggedScan = useRef(false);
+  const currentLogId = useRef(null);
 
-  const handleInputChange = (e) => {
-    setUserInput(e.target.value);
-  };
+  // Auto-detect best matching rule from barcode input
+  useEffect(() => {
+    const input = userInput.trim();
+    const matched = detectableRules.find((r) => {
+      try {
+        const flags = (r.flags || "i").replace(/[gms]/g, "");
+        return new RegExp(`^(?:${r.regex})$`, flags).test(input);
+      } catch {
+        return false;
+      }
+    });
+    setActiveRule(matched || rules[0]);
+  }, [userInput]);
 
+  // Apply active rule filter whenever ocrResult or activeRule changes
+  useEffect(() => {
+    if (!ocrResult) {
+      setFilteredText("");
+      return;
+    }
+    try {
+      const regex = new RegExp(activeRule.regex, activeRule.flags || "");
+      const match = ocrResult.match(regex);
+      setFilteredText(match ? match[0] : "");
+    } catch {
+      setFilteredText("");
+    }
+  }, [ocrResult, activeRule]);
+
+  // Similarity score
   useEffect(() => {
     const input = userInput.trim();
     const ocr = filteredText.trim();
-
-    // only compute if both have real content
-    if (input !== "" && ocr !== "") {
-      const normalizedOcr = ocr.split(/\r?\n/).join(" ").toUpperCase();
-      const normalizedUserInput = input.toUpperCase();
-
-      const lev = compareValues(normalizedUserInput, normalizedOcr);
+    if (input && ocr) {
+      const lev = compareValues(
+        input.toUpperCase(),
+        ocr.split(/\r?\n/).join(" ").toUpperCase()
+      );
       setSimilarity(lev?.similarity * 100 || 0);
     } else {
       setSimilarity(0);
     }
   }, [userInput, filteredText]);
 
+  // Reset log flag on new scan
+  useEffect(() => {
+    if (ocrResult) hasLoggedScan.current = false;
+  }, [ocrResult]);
+
+  // Log once per scan after filteredText settles
+  useEffect(() => {
+    if (ocrResult && !hasLoggedScan.current) {
+      hasLoggedScan.current = true;
+      const input = userInput.trim();
+      const ocr = filteredText.trim();
+      let logSimilarity = 0;
+      if (input && ocr) {
+        const lev = compareValues(
+          input.toUpperCase(),
+          ocr.split(/\r?\n/).join(" ").toUpperCase()
+        );
+        logSimilarity = lev?.similarity * 100 || 0;
+      }
+      currentLogId.current = saveEntry({
+        barcode: userInput,
+        rawOCR: ocrResult,
+        filteredOCR: filteredText,
+        similarity: logSimilarity,
+        rule: activeRule.label,
+      });
+    }
+  }, [filteredText]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleOcrResult = (rawText) => {
     setOcrResult(rawText);
     setShowModal(true);
   };
 
-  const handleConfirm = () => {
+  const clearState = () => {
     setUserInput("");
     setOcrResult("");
     setFilteredText("");
     setShowModal(false);
   };
-  // Map status to actual hex colors
-  const bgColors = {
-    success: "#baffc9",
-    warning: "#ffdfba",
-    error: "#ffb3ba",
+
+  const handleConfirm = () => {
+    updateEntry(currentLogId.current, { disposition: 'confirmed' });
+    clearState();
   };
-  const status =
-    similarity >= 100 ? "success" : similarity >= 75 ? "warning" : "error";
+
+  const handleDismiss = () => {
+    updateEntry(currentLogId.current, { disposition: 'dismissed' });
+    setShowModal(false);
+  };
+
+  const bgColors = { success: "#baffc9", warning: "#ffdfba", error: "#ffb3ba" };
+  const status = similarity >= 100 ? "success" : similarity >= 75 ? "warning" : "error";
   const modalBg = bgColors[status];
 
   return (
     <div className="ocr-text-match-container">
-      <h2>OCR Text Match</h2>
 
       <CameraWrapper
         webcamRef={webcamRef}
         setCameraReady={setCameraReady}
         cameraReady={cameraReady}
       />
-      <button
-        className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-        onClick={handleConfirm}
-      >
-        Clear Input
-      </button>
-      <OCRFilterComponent
-        ocrResult={ocrResult}
-        filteredText={setFilteredText}
-      />
 
       <div className="input-field">
         <label htmlFor="ItemInput">
-          Input Text here:
+          Barcode:
           <input
             type="text"
             id="ItemInput"
             name="ItemInput"
             value={userInput}
-            onChange={handleInputChange}
+            onChange={(e) => setUserInput(e.target.value)}
           />
         </label>
       </div>
 
-      <OCRComponent
-        webcamRef={webcamRef}
-        onOcrResult={handleOcrResult}
-        cameraReady={cameraReady}
-      />
+      <div className="capture-wrapper">
+        <OCRComponent
+          webcamRef={webcamRef}
+          onOcrResult={handleOcrResult}
+          cameraReady={cameraReady}
+        />
+      </div>
+      <button onClick={clearState}>Clear Input</button>
+      <details
+        className="settings-panel"
+        open={settingsOpen}
+        onToggle={(e) => setSettingsOpen(e.target.open)}
+      >
+        <summary>
+          Settings
+          {userInput.trim() && activeRule.regex !== ".*" && (
+            <span className="auto-rule-badge">auto: {activeRule.label}</span>
+          )}
+        </summary>
+        <OCRFilterComponent
+          selectedRegex={activeRule.regex}
+          onRuleChange={setActiveRule}
+        />
+        
+      </details>
 
       {showModal && (
         <div className="modal-backdrop">
           <div className="modal" style={{ backgroundColor: modalBg }}>
-            <button className="modal-close" onClick={() => setShowModal(false)}>
+            <button className="modal-close" onClick={handleDismiss}>
               ×
             </button>
             <h2>Scanning Results</h2>
-            <div>
-              <strong>Raw Image Capture:</strong>
-              <p>{ocrResult}</p>
+             <div>
+              <strong>Barcode Input:</strong>
+              <p>{userInput}</p>
             </div>
             <div>
-              <strong>Filtered Output:</strong>
+              <strong>Processed Image Output:</strong>
               <p>{filteredText || "No matching text found"}</p>
+            </div>
+            <div>
+              <strong>Raw Image Scan:</strong>
+              <p>{ocrResult}</p>
             </div>
             <div>
               <strong>Similarity Match:</strong>
               <p>{similarity.toFixed(2)}%</p>
             </div>
             <div className="mt-4 text-center">
-              <button
-                className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-                onClick={handleConfirm}
-              >
-                Confirm and Clear
-              </button>
+              <button onClick={handleConfirm}>Confirm and Clear</button>
             </div>
           </div>
         </div>

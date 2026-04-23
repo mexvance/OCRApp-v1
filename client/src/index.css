@@ -2,20 +2,25 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
+  min-height: 100vh;
   background-color: #242424;
   color: rgba(255, 255, 255, 0.9);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #root {
   width: 100%;
-  height: 100%;
-  display: flex; /* center the main component inside root */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 1rem 0;
 }
 
 .ocr-text-match-container {
@@ -88,34 +93,38 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-.camera-controls {
-  width: 100%;
-  margin-top: 1rem;
+.camera-selector-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  gap: 0.4rem;
 }
 
-.camera-controls select,
-.camera-controls button {
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
-  font-size: 1rem;
+.camera-selector-icon {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 1.3rem;
+  padding: 0.4em 0.6em;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+}
+
+.camera-selector-dropdown {
+  width: auto;
+  max-width: 180px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
   border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.camera-controls button {
-  background-color: #333;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.camera-controls button:hover {
-  background-color: #505050;
 }
 
 video, .webcam-container {
@@ -260,6 +269,76 @@ button:hover {
 
   button:hover {
     background-color: #e0e0e0;
+  }
+}
+
+.settings-panel {
+  width: 100%;
+  max-width: 400px;
+}
+
+.settings-panel summary {
+  cursor: pointer;
+  padding: 0.4rem 0;
+  font-weight: 600;
+  color: #ccc;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.auto-rule-badge {
+  font-size: 0.7rem;
+  font-weight: 400;
+  background: #00cc99;
+  color: #000;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  margin-left: 0.5rem;
+}
+
+.settings-panel summary::before {
+  content: '▶';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+}
+
+.settings-panel[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.capture-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (max-width: 767px) {
+  h2 {
+    font-size: 1.4rem;
+    margin: 0.25rem 0;
+  }
+
+  .camera-wrapper-container {
+    margin: 0.4rem 0;
+  }
+
+  .capture-wrapper {
+    position: sticky;
+    bottom: 0;
+    padding: 0.5rem 0;
+    z-index: 20;
+    background-color: #242424;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .settings-panel summary {
+    color: #333;
+  }
+
+  .capture-wrapper {
+    background-color: #ffffff;
   }
 }
 

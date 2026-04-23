@@ -1,25 +1,21 @@
-import './App.css'
-import InputMatch from './pages/InputMatch'
-import OcrApp from './pages/OCRPage'
-import DataLookupMatch from './pages/DataLookupMatch'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import InputMatch from './pages/InputMatch';
+import ScanLog from './pages/ScanLog';
+import NavBar from './components/NavBar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
     <Router>
-      {/* <nav>
-        <Link to="/">Text Verification</Link> {" | "} 
-        <Link to="/InputMatch">Input Matcher</Link> {" | "} 
-        <Link to="/DataLookupMatch">DataLookupMatch</Link>
-      </nav> */}
-      <Routes>
-        {/* <Route path="/" element={<OcrApp/>} /> */}
-        <Route path="/" element={<InputMatch/>} />
-        {/* <Route path="/DataLookupMatch" element={<DataLookupMatch/>}/> */}
-      </Routes>
+      <NavBar />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<InputMatch />} />
+          <Route path="/scan-log" element={<ScanLog />} />
+        </Routes>
+      </main>
     </Router>
-    
-    
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import Camera from "./Camera"; // your simplified Camera component
+import Camera from "./Camera";
 import PropTypes from "prop-types";
 
-const CameraWrapper = ({ webcamRef, setCameraReady, cameraReady}) => {
+const CameraWrapper = ({ webcamRef, setCameraReady }) => {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [devices, setDevices] = useState([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState("");
+  const [selectorOpen, setSelectorOpen] = useState(false);
 
   const toggleCamera = () => {
     if (isCameraOn) {
@@ -14,23 +15,19 @@ const CameraWrapper = ({ webcamRef, setCameraReady, cameraReady}) => {
       }
       setIsCameraOn(false);
       setCameraReady(false);
+      setSelectorOpen(false);
     } else {
       setIsCameraOn(true);
     }
   };
 
-  // Fetch devices on mount
   useEffect(() => {
     const fetchDevices = async () => {
       try {
         const allDevices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = allDevices.filter(
-          (device) => device.kind === "videoinput"
-        );
+        const videoDevices = allDevices.filter((d) => d.kind === "videoinput");
         setDevices(videoDevices);
-        if (videoDevices.length > 0) {
-          setSelectedDeviceId(videoDevices[0].deviceId);
-        }
+        if (videoDevices.length > 0) setSelectedDeviceId(videoDevices[0].deviceId);
       } catch (err) {
         console.error("Error fetching devices:", err);
       }
@@ -45,18 +42,43 @@ const CameraWrapper = ({ webcamRef, setCameraReady, cameraReady}) => {
   return (
     <div className="camera-wrapper-container">
       <div className="camera-container">
-        {/* Top-right icon to turn off */}
+
+        {/* Top-right: close camera */}
         {isCameraOn && (
-          <div
-            className="camera-toggle"
-            onClick={toggleCamera}
-            title="Turn Off Camera"
-          >
+          <div className="camera-toggle" onClick={toggleCamera} title="Turn Off Camera">
             ✖
           </div>
         )}
 
-        {/* Camera feed or placeholder */}
+        {/* Top-left: camera selector (only when multiple cameras exist) */}
+        {isCameraOn && devices.length > 1 && (
+          <div className="camera-selector-overlay">
+            <div
+              className="camera-selector-icon"
+              onClick={() => setSelectorOpen((o) => !o)}
+              title="Switch Camera"
+            >
+              ⇄
+            </div>
+            {selectorOpen && (
+              <select
+                className="camera-selector-dropdown"
+                value={selectedDeviceId}
+                onChange={(e) => {
+                  setSelectedDeviceId(e.target.value);
+                  setSelectorOpen(false);
+                }}
+              >
+                {devices.map((device, index) => (
+                  <option key={device.deviceId} value={device.deviceId}>
+                    {device.label || `Camera ${index + 1}`}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
+
         {isCameraOn ? (
           <Camera
             webcamRef={webcamRef}
@@ -70,36 +92,13 @@ const CameraWrapper = ({ webcamRef, setCameraReady, cameraReady}) => {
           </div>
         )}
       </div>
-      {cameraReady ? (
-        <>
-          <div className="camera-controls">
-            {devices.length > 0 && (
-              <select
-                onChange={(e) => setSelectedDeviceId(e.target.value)}
-                value={selectedDeviceId}
-              >
-                {devices.map((device, index) => (
-                  <option key={device.deviceId} value={device.deviceId}>
-                    {device.label || `Camera ${index + 1}`}
-                  </option>
-                ))}
-              </select>
-            )}
-
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
     </div>
   );
 };
 
 CameraWrapper.propTypes = {
   webcamRef: PropTypes.object.isRequired,
-  onOcrResult: PropTypes.func.isRequired,
   setCameraReady: PropTypes.func.isRequired,
-  cameraReady: PropTypes.string.isRequired,
 };
 
 export default CameraWrapper;
