@@ -3,6 +3,7 @@ import CameraWrapper from "../components/CameraWrapper";
 import OCRFilterComponent from "../components/OCRFilterComponent";
 import compareValues from "../Services/compareService";
 import OCRComponent from "../components/OCRComponent";
+import callGoogleAPI from "../Services/callGoogleAPI";
 import { saveEntry, updateEntry } from "../Services/logService";
 import rules from "../assets/rules.json";
 
@@ -19,8 +20,24 @@ const InputMatch = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeRule, setActiveRule] = useState(rules[0]);
   const [settingsOpen, setSettingsOpen] = useState(window.innerWidth >= 768);
+  const [captureLoading, setCaptureLoading] = useState(false);
   const hasLoggedScan = useRef(false);
   const currentLogId = useRef(null);
+
+  const captureAndOcr = async () => {
+    if (!cameraReady || !webcamRef.current) return;
+    const imageSrc = webcamRef.current.getScreenshot();
+    if (!imageSrc) return;
+    setCaptureLoading(true);
+    try {
+      const text = await callGoogleAPI(imageSrc);
+      handleOcrResult(text);
+    } catch (err) {
+      console.error('OCR error:', err);
+    } finally {
+      setCaptureLoading(false);
+    }
+  };
 
   // Auto-detect best matching rule from barcode input
   useEffect(() => {
@@ -128,11 +145,13 @@ const InputMatch = () => {
         webcamRef={webcamRef}
         setCameraReady={setCameraReady}
         cameraReady={cameraReady}
+        onCapture={captureAndOcr}
+        captureLoading={captureLoading}
       />
 
       <div className="input-field">
-        <label htmlFor="ItemInput">
-          Barcode:
+        <label htmlFor="ItemInput">Barcode:</label>
+        <div className="input-with-clear">
           <input
             type="text"
             id="ItemInput"
@@ -140,17 +159,26 @@ const InputMatch = () => {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-        </label>
+          {userInput && (
+            <button
+              className="input-clear-btn"
+              onClick={() => setUserInput("")}
+              aria-label="Clear barcode"
+              tabIndex={-1}
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="capture-wrapper">
         <OCRComponent
-          webcamRef={webcamRef}
-          onOcrResult={handleOcrResult}
+          onCapture={captureAndOcr}
+          loading={captureLoading}
           cameraReady={cameraReady}
         />
       </div>
-      <button onClick={clearState}>Clear Input</button>
       <details
         className="settings-panel"
         open={settingsOpen}

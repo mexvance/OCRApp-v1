@@ -67,10 +67,14 @@ h2 {
   position: absolute;
   top: 8px;
   right: 8px;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(0,0,0,0.3);
   color: white;
-  font-size: 1.3rem;
-  padding: 0.4em 0.6em;
+  font-size: 1.1rem;
   border-radius: 50%;
   cursor: pointer;
   z-index: 10;
@@ -102,17 +106,22 @@ h2 {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.4rem;
+  
+  
 }
 
 .camera-selector-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
-  font-size: 1.3rem;
-  padding: 0.4em 0.6em;
+  font-size: 1.1rem;
   border-radius: 50%;
   cursor: pointer;
   user-select: none;
-  line-height: 1;
 }
 
 .camera-selector-dropdown {
@@ -125,6 +134,29 @@ h2 {
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   cursor: pointer;
+}
+
+.camera-capture-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  user-select: none;
+}
+
+.camera-capture-btn.loading {
+  opacity: 0.5;
+  cursor: default;
 }
 
 video, .webcam-container {
@@ -153,6 +185,7 @@ input[type="text"], select {
 }
 
 .input-field label {
+  display: block;
   width: 100%;
   margin-bottom: 0.5rem;
   font-weight: 500;
@@ -168,6 +201,38 @@ input[type="text"], select {
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   color: #000;
+}
+
+.input-with-clear {
+  position: relative;
+  width: 100%;
+}
+
+.input-with-clear input {
+  padding-right: 2.5rem;
+}
+
+.input-clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  min-width: unset;
+  padding: 0.2rem 0.4rem;
+  margin: 0;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 0.85rem;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.input-clear-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
 }
 
 button {

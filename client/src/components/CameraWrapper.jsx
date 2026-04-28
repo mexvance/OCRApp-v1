@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Camera from "./Camera";
 import PropTypes from "prop-types";
 
-const CameraWrapper = ({ webcamRef, setCameraReady }) => {
+const CameraWrapper = ({ webcamRef, setCameraReady, onCapture, captureLoading, cameraReady }) => {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [devices, setDevices] = useState([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState("");
@@ -91,6 +91,22 @@ const CameraWrapper = ({ webcamRef, setCameraReady }) => {
             <p>Click to turn camera on</p>
           </div>
         )}
+
+        {/* Bottom-right: capture button */}
+        {isCameraOn && cameraReady && (
+          <div
+            className={`camera-capture-btn${captureLoading ? ' loading' : ''}`}
+            onClick={captureLoading ? undefined : onCapture}
+            title="Capture and OCR"
+          >
+            {captureLoading ? '…' : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -99,6 +115,9 @@ const CameraWrapper = ({ webcamRef, setCameraReady }) => {
 CameraWrapper.propTypes = {
   webcamRef: PropTypes.object.isRequired,
   setCameraReady: PropTypes.func.isRequired,
+  onCapture: PropTypes.func.isRequired,
+  captureLoading: PropTypes.bool.isRequired,
+  cameraReady: PropTypes.bool.isRequired,
 };
 
 export default CameraWrapper;
